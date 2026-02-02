@@ -4,6 +4,10 @@
   "description": "Librairie d'analyse de code JavaScript respectant les principes SOLID",
   "main": "src/index.js",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asaph65/solid-check.git"
+  },
   "scripts": {
     "valider": "node src/index.js",
     "exemple": "node exemples/utilisation-basique.js",
