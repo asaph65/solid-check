@@ -1,0 +1,56 @@
+{
+    "name": "solid-check-assistant",
+    "displayName": "SOLID-Check Assistant",
+    "description": "Assistant de qualité de code en temps réel (SOLID, Clean Code)",
+    "version": "1.0.0",
+    "publisher": "asaph-ndja",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": [
+        "Linters",
+        "Programming Languages"
+    ],
+    "activationEvents": [
+        "onLanguage:javascript",
+        "onLanguage:typescript",
+        "onLanguage:python",
+        "onLanguage:java",
+        "onLanguage:csharp",
+        "onLanguage:php"
+    ],
+    "main": "./src/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "solid-check.refactoriser",
+                "title": "Refactoriser avec SOLID-Check"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "SOLID-Check",
+            "properties": {
+                "solidCheck.maxLines": {
+                    "type": "number",
+                    "default": 100,
+                    "description": "Nombre maximum de lignes par fichier"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": ""
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.75.0",
+        "@types/node": "^18.0.0",
+        "eslint": "^8.30.0"
+    },
+    "dependencies": {
+        "vscode-languageclient": "^8.1.0",
+        "vscode-languageserver": "^8.1.0",
+        "vscode-languageserver-textdocument": "^1.0.8",
+        "vscode-languageserver-protocol": "^3.17.3"
+    }
+}

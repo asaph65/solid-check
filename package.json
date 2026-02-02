@@ -1,0 +1,29 @@
+{
+  "name": "solid-check",
+  "version": "1.0.0",
+  "description": "Librairie d'analyse de code JavaScript respectant les principes SOLID",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "valider": "node src/index.js",
+    "exemple": "node exemples/utilisation-basique.js",
+    "test": "node src/index.js",
+    "test:cohesion": "node test/test-analyseur-cohesion.js"
+  },
+  "keywords": [
+    "solid",
+    "analyse",
+    "qualite",
+    "code",
+    "javascript",
+    "clean-architecture"
+  ],
+  "author": "Asaph N'dja",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "glob": "^13.0.0"
+  }
+}
