@@ -1,0 +1,10 @@
+.git/
+.vscode/
+node_modules/
+Captures/
+*.log
+src/test/
+server/test/
+.gitignore
+.solid-check.json
+config/

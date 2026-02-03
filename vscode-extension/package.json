@@ -2,12 +2,8 @@
     "name": "solid-check-assistant",
     "displayName": "SOLID-Check Assistant",
     "description": "Assistant de qualité de code en temps réel (SOLID, Clean Code)",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "publisher": "Ndjaasaph",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/asaph65/solid-check.git"
-    },
     "engines": {
         "vscode": "^1.75.0"
     },
