@@ -27,9 +27,29 @@ async function executer() {
     try {
         // 1. Chargement de la configuration
         const chargeur = new ChargeurConfiguration();
-        const configuration = await chargeur.charger(
+
+        // Chercher la configuration dans plusieurs emplacements (projet utilisateur d'abord)
+        const configPaths = [
+            path.join(process.cwd(), 'config/regles.json'),
+            path.join(process.cwd(), '.solid-check.json'),
             path.join(__dirname, '../config/regles.json')
-        );
+        ];
+
+        let configuration = null;
+        for (const configPath of configPaths) {
+            try {
+                configuration = await chargeur.charger(configPath);
+                console.log(`📋 Configuration chargée depuis: ${path.relative(process.cwd(), configPath) || configPath}`);
+                break;
+            } catch (error) {
+                // Continuer vers le prochain chemin
+                continue;
+            }
+        }
+
+        if (!configuration) {
+            throw new Error('Aucun fichier de configuration trouvé. Veuillez créer config/regles.json ou .solid-check.json');
+        }
 
         // 2. Injection de dépendances - Construction des services
 

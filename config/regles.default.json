@@ -1,0 +1,46 @@
+{
+    "limites": {
+        "lignesParFichier": 300,
+        "methodesParClasse": 15,
+        "parametresParFonction": 5
+    },
+    "complexite": {
+        "motsClésMaximum": 20,
+        "niveauxImbrication": 4
+    },
+    "cohesion": {
+        "scoreMinimumdeCohesion": 60,
+        "limiteLignesParFonction": 50,
+        "limiteProprietesNonCohesives": 5,
+        "limiteCategoriesVerbes": 4
+    },
+    "chemins": {
+        "aAnalyser": [
+            "src/**/*.js",
+            "lib/**/*.js",
+            "*.js"
+        ],
+        "aIgnorer": [
+            "node_modules/**",
+            "dist/**",
+            "build/**",
+            "test/**",
+            "tests/**",
+            "*.test.js",
+            "*.spec.js"
+        ]
+    },
+    "regles": {
+        "verifierTailleFichiers": true,
+        "verifierComplexite": true,
+        "verifierCohesion": true,
+        "echecSurViolation": false
+    },
+    "messages": {
+        "fichierTropGrand": "⚠️  Le fichier '{fichier}' contient {lignes} lignes (limite: {limite})",
+        "complexiteTropElevee": "⚠️  Le fichier '{fichier}' a une complexité trop élevée: {raison}",
+        "cohesionInsuffisante": "⚠️  Le fichier '{fichier}' a un score de cohésion de {score}/100 - Violation du SRP",
+        "validationReussie": "✅ Validation réussie - Tous les fichiers respectent les règles SOLID",
+        "validationEchouee": "❌ Validation échouée - {nombre} violation(s) détectée(s)"
+    }
+}

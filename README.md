@@ -57,17 +57,77 @@ Orchestrateur qui :
 ## 📦 Installation
 
 ```bash
+npm install --save-dev solid-check
+```
+
+## 🚀 Utilisation Rapide
+
+### Méthode 1 : Avec npx (recommandé)
+
+```bash
+npx solid-check
+```
+
+### Méthode 2 : Via npm scripts
+
+Ajoutez dans votre `package.json` :
+
+```json
+{
+  "scripts": {
+    "lint:solid": "solid-check"
+  }
+}
+```
+
+Puis lancez :
+
+```bash
+npm run lint:solid
+```
+
+### Configuration (Optionnelle)
+
+Par défaut, SOLID-Check utilise une configuration raisonnable. Pour personnaliser, créez un fichier `config/regles.json` ou `.solid-check.json` à la racine de votre projet :
+
+```json
+{
+  "limites": {
+    "lignesParFichier": 100,
+    "methodesParClasse": 10,
+    "parametresParFonction": 5
+  },
+  "chemins": {
+    "aAnalyser": ["src/**/*.js"],
+    "aIgnorer": ["node_modules/**", "test/**"]
+  },
+  "regles": {
+    "verifierTailleFichiers": true,
+    "verifierComplexite": true,
+    "verifierCohesion": true,
+    "echecSurViolation": true
+  }
+}
+```
+
+Si aucun fichier de configuration n'est fourni, des valeurs par défaut seront utilisées.
+
+---
+
+## 🔧 Développement de SOLID-Check
+
+### Installation pour contribuer
+
+```bash
 # Cloner le projet
-git clone <url-du-repo>
+git clone https://github.com/asaph65/solid-check.git
 cd solid-check
 
 # Installer les dépendances
 npm install
 ```
 
-## 🔧 Utilisation
-
-### Validation de votre projet
+### Validation du projet SOLID-Check
 
 ```bash
 npm run valider

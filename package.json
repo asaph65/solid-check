@@ -1,8 +1,11 @@
 {
   "name": "solid-check",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Librairie d'analyse de code JavaScript respectant les principes SOLID",
   "main": "src/index.js",
+  "bin": {
+    "solid-check": "src/index.js"
+  },
   "type": "module",
   "repository": {
     "type": "git",

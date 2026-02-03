@@ -2,6 +2,7 @@ import IAnalyseur from '../../interfaces/i-analyseur.js';
 import CompteurMethodes from './analyseurs/compteur-methodes.js';
 import CompteurMotsCles from './analyseurs/compteur-mots-cles.js';
 import AnalyseurParametres from './analyseurs/analyseur-parametres.js';
+import AnalyseurImbrication from './analyseurs/analyseur-imbrication.js';
 
 /**
  * Service : Détecteur de Complexité (Refactorisé)
@@ -12,6 +13,7 @@ class DetecteurComplexite extends IAnalyseur {
         this.compteurMethodes = new CompteurMethodes();
         this.compteurMotsCles = new CompteurMotsCles();
         this.analyseurParametres = new AnalyseurParametres();
+        this.analyseurImbrication = new AnalyseurImbrication();
     }
 
     async analyser(chemin, contenu, regles) {
@@ -49,6 +51,21 @@ class DetecteurComplexite extends IAnalyseur {
                 message: `${fctComplexes.length} fonction(s) avec trop de paramètres`,
                 details: { fonctions: fctComplexes }
             });
+        }
+
+        // 4. Imbrication
+        const resImbrication = this.analyseurImbrication.analyser(contenu);
+        metriques.profondeurMaximale = resImbrication.profondeurMaximale;
+        metriques.nombreViolationsImbrication = resImbrication.nombreViolations;
+        if (!resImbrication.conforme) {
+            for (const violation of resImbrication.violations) {
+                violations.push({
+                    type: violation.type,
+                    gravite: 'AVERTISSEMENT',
+                    message: violation.message,
+                    details: { ligne: violation.ligne, profondeur: violation.profondeur }
+                });
+            }
         }
 
         // Message global si échec

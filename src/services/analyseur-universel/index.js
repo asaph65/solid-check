@@ -32,6 +32,21 @@ class AnalyseurUniversel extends IAnalyseur {
         // 2. Analyse Nommage (Facade vers stratégie)
         const resNommage = AnalyseurNommage.analyser(contenu, config.regex.fonction);
 
+        // Ajouter les violations de nommage
+        if (!resNommage.conforme) {
+            for (const violation of resNommage.violations) {
+                violations.push({
+                    type: violation.type,
+                    gravite: 'AVERTISSEMENT',
+                    message: `[${nom}] ${violation.message}`,
+                    details: {
+                        element: violation.element,
+                        categorie: violation.categorie
+                    }
+                });
+            }
+        }
+
         return {
             analyseur: 'Analyseur Universel',
             fichier: cheminFichier,
@@ -40,7 +55,10 @@ class AnalyseurUniversel extends IAnalyseur {
             metriques: {
                 langage: nom,
                 densiteLogique: resDensite.valeur,
-                nombreFonctions: resNommage.nombreFonctions
+                nombreFonctions: resNommage.nombreFonctions,
+                nombreVariables: resNommage.nombreVariables,
+                nombreConstantes: resNommage.nombreConstantes,
+                nombreViolationsNommage: resNommage.violations.length
             }
         };
     }
