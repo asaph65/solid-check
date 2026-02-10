@@ -31,59 +31,29 @@ class ChargeurConfiguration {
         }
     }
 
-    /**
-     * Valide la structure de la configuration
-     * @private
-     * @param {Object} config - Configuration à valider
-     * @throws {Error} Si la configuration est invalide
-     */
     _validerConfiguration(config) {
-        const champsRequis = ['limites', 'chemins', 'regles', 'messages'];
-
-        for (const champ of champsRequis) {
-            if (!config[champ]) {
-                throw new Error(`Champ requis manquant dans la configuration: ${champ}`);
-            }
-        }
-
-        if (typeof config.limites.lignesParFichier !== 'number') {
-            throw new Error('limites.lignesParFichier doit être un nombre');
-        }
-
-        if (!Array.isArray(config.chemins.aAnalyser)) {
-            throw new Error('chemins.aAnalyser doit être un tableau');
+        // Validation minimale pour la flexibilité intelligente
+        if (!config.detecteurs_srp && !config.regles) {
+            throw new Error("Configuration invalide : 'detecteurs_srp' ou 'regles' must be present.");
         }
     }
 
-    /**
-     * Crée une configuration par défaut
-     * @returns {Object} Configuration par défaut
-     */
     creerConfigurationParDefaut() {
         return {
-            limites: {
-                lignesParFichier: 100,
-                methodesParClasse: 10,
-                parametresParFonction: 5
-            },
-            complexite: {
-                motsClésMaximum: 15,
-                niveauxImbrication: 4
-            },
             chemins: {
-                aAnalyser: ['src/**/*.js'],
+                aAnalyser: ['src/**/*.{js,jsx,ts,tsx}'],
                 aIgnorer: ['node_modules/**', 'test/**']
             },
-            regles: {
-                verifierTailleFichiers: true,
-                verifierComplexite: true,
-                echecSurViolation: true
+            detecteurs_srp: {
+                cohesion: { score_minimum: 60, severite: 'error' },
+                responsabilites: { maximum: 3 }
             },
-            messages: {
-                fichierTropGrand: "⚠️  Le fichier '{fichier}' contient {lignes} lignes (limite: {limite})",
-                complexiteTropElevee: "⚠️  Le fichier '{fichier}' a une complexité trop élevée: {raison}",
-                validationReussie: "✅ Validation réussie - Tous les fichiers respectent les règles SOLID",
-                validationEchouee: "❌ Validation échouée - {nombre} violation(s) détectée(s)"
+            regles: { echecSurViolation: true },
+            regles_par_contexte: {
+                patterns: {
+                    service: { limites: { cohesion_min: 80 } },
+                    repository: { limites: { cohesion_min: 70 } }
+                }
             }
         };
     }

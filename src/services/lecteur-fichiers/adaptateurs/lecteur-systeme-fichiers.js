@@ -31,7 +31,7 @@ class LecteurSystemeFichiers extends ILecteurFichiers {
      * @param {string[]} exclusions - Motifs de fichiers à exclure
      * @returns {Promise<string[]>} Liste des chemins de fichiers
      */
-    async listerFichiers(cheminRepertoire, motifs = ['**/*.js'], exclusions = []) {
+    async listerFichiers(cheminRepertoire, motifs = ['**/*.{js,jsx,ts,tsx}'], exclusions = []) {
         try {
             const fichiersTrouves = [];
 

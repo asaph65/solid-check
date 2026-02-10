@@ -41,7 +41,9 @@ class ServiceLecteurFichiers {
      * @returns {Promise<string[]>} Liste des fichiers à analyser
      */
     async listerFichiersAAnalyser(cheminRacine, configuration) {
-        const { aAnalyser, aIgnorer } = configuration.chemins;
+        const chemins = configuration.chemins || {};
+        const aAnalyser = chemins.aAnalyser || ['src/**/*.{js,jsx,ts,tsx}'];
+        const aIgnorer = chemins.aIgnorer || ['node_modules/**', 'test/**'];
 
         return await this._adaptateur.listerFichiers(
             cheminRacine,
