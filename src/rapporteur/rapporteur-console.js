@@ -48,17 +48,24 @@ class RapporteurConsole {
     _afficherFichier(rapport) {
         const score = UtilitairesRapporteur.extraireScore(rapport);
         const estBloquant = UtilitairesRapporteur.estBloquant(rapport, score);
-        const { couleur, texte } = CalculateurScore.determinerStatut(score);
         const C = FormatteurANSI.COULEURS;
-        const clr = estBloquant ? 'ROUGE' : couleur;
-        const txt = estBloquant ? 'VIOLATION SOLID' : texte;
 
-        console.log(`  ${C.GRIS}*${C.RESET} ${path.basename(rapport.fichier).padEnd(40)} ${C.GRIS}│${C.RESET} ${C[clr]}${txt.padEnd(25)}${C.RESET} ${C.GRIS}│${C.RESET} Score: ${score}/100`);
+        // Extraire les métriques du smart analyzer
+        const smart = rapport.analyseurs.find(a => a.metriques && a.metriques.cohesion !== undefined) || {};
+        const ctx = smart.contexte || 'GENERIC';
+        const cohesion = smart.metriques?.cohesion ?? 100;
+
+        const clr = estBloquant ? C.ROUGE : (cohesion > 80 ? C.VERT : C.JAUNE);
+        const statusTxt = estBloquant ? 'VIOLATION SRP' : (cohesion > 80 ? 'COHESIF' : 'MOYEN');
+
+        console.log(`  ${C.GRIS}*${C.RESET} ${path.basename(rapport.fichier).padEnd(35)} ${C.GRIS}│${C.RESET} ${clr}${statusTxt.padEnd(15)}${C.RESET} ${C.GRIS}│${C.RESET} Ctx: ${ctx.padEnd(12)} ${C.GRIS}│${C.RESET} Cohésion: ${cohesion}%`);
 
         for (const a of rapport.analyseurs) {
-            for (const v of a.violations) {
-                const tag = v.gravite === 'ERREUR' ? '[!]' : '[WARN]';
-                console.log(`    ${C.GRIS}└─ ${tag} ${v.message}${C.RESET}`);
+            if (a.violations) {
+                for (const v of a.violations) {
+                    const tag = v.severite === 'error' ? '[!]' : '[WARN]';
+                    console.log(`    ${C.GRIS}└─ ${tag} ${v.raison || v.message} : ${v.suggestion || ''}${C.RESET}`);
+                }
             }
         }
         return estBloquant;

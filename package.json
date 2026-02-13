@@ -1,6 +1,6 @@
 {
   "name": "solid-check",
-  "version": "1.0.1",
+  "version": "1.5.0",
   "description": "Librairie d'analyse de code JavaScript respectant les principes SOLID",
   "main": "src/index.js",
   "bin": {
@@ -27,10 +27,16 @@
   ],
   "author": "Asaph N'dja",
   "license": "MIT",
+  "files": [
+    "src",
+    "config",
+    "README.md"
+  ],
   "engines": {
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.74.0",
     "glob": "^13.0.0"
   }
 }

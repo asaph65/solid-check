@@ -17,16 +17,14 @@ class UtilitairesRapporteur {
 
     static extraireScore(rapport) {
         if (!rapport.analyseurs) return 100;
-        const cohesion = rapport.analyseurs.find(a => a.metriques && a.metriques.scoreDeCohesion !== undefined);
-        return cohesion ? cohesion.metriques.scoreDeCohesion : 100;
+        const smart = rapport.analyseurs.find(a => a.metriques && a.metriques.cohesion !== undefined);
+        return smart ? smart.metriques.cohesion : 100;
     }
 
     static estBloquant(rapport, score) {
-        if (score < 50) return true;
         if (!rapport.analyseurs) return false;
-        return rapport.analyseurs.some(a =>
-            a.violations && a.violations.some(v => v.type === 'TAILLE_FICHIER')
-        );
+        // Le statut 'error' du smart analyzer est propagé ici
+        return rapport.analyseurs.some(a => a.status === 'error');
     }
 }
 

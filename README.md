@@ -1,58 +1,66 @@
 # SOLID-Check
 
-> Librairie d'analyse de code JavaScript respectant les principes SOLID
+> Librairie d'analyse SOLID Intelligente pour JavaScript
 
-## 📋 Description
+## 🎯 Pourquoi SOLID-Check ?
 
-**SOLID-Check** est une librairie d'analyse statique de code JavaScript conçue selon une architecture micro-services. Elle vérifie que votre code respecte les bonnes pratiques en termes de taille de fichiers et de complexité.
+L'approche traditionnelle de l'analyse statique est souvent trop rigide : un Repository de 150 lignes peut être parfaitement conforme s'il est cohésif, alors qu'un Service de 30 lignes peut violer le SRP s'il mélange trop de responsabilités.
 
-### Principes Architecturaux
+**SOLID-Check** résout ce problème avec une **Analyse Intelligente** :
+- **Cohésion > Taille** : Un score de cohésion (LCOM) élevé pardonne les fichiers longs.
+- **Détection de Contexte** : Les règles s'adaptent selon si votre fichier est un Service, Repository, Controller, etc.
+- **Analyse des Responsabilités** : Détection automatique des domaines fonctionnels (CRUD, Validation, Calcul, Notification).
 
-Cette librairie est construite en respectant strictement les **principes SOLID** :
+## ✨ Fonctionnalités Clés
 
-- **S** - Single Responsibility : Chaque service a une seule responsabilité
-- **O** - Open/Closed : Extension via configuration, pas modification
-- **L** - Liskov Substitution : Les implémentations sont interchangeables
-- **I** - Interface Segregation : Interfaces spécifiques et minimales
-- **D** - Dependency Inversion : Injection de dépendances systématique
+### 🧠 Analyseur de Cohésion (SRP)
+Utilise l'algorithme **LCOM (Lack of Cohesion of Methods)** pour mesurer la dépendance interne entre vos méthodes et vos propriétés.
+- Score de 0 à 100.
+- Détecte les groupes de méthodes déconnectés qui devraient être séparés.
 
-##  Fonctionnalités
+### 🕵️ Détecteur de Responsabilités
+Analyse non seulement les noms des méthodes mais aussi leur corps pour identifier les mélanges de domaines :
+- **CRUD** : Gestion des données (database, repository).
+- **VALIDATION** : Vérification des règles métier.
+- **NOTIFICATION** : Envoi d'emails ou notifications.
+- **CALCUL** : Traitement de données complexe.
 
-###  Analyseur de Taille
-Vérifie que les fichiers ne dépassent pas **100 lignes** (configurable).
+### 📍 Adaptation au Contexte
+Le système identifie automatiquement le type de composant :
+- **Repository** : Tolérance accrue pour le nombre de méthodes CRUD cohésives.
+- **Service** : SRP strict requis pour la logique métier.
+- **Controller** : Tolérance pour l'orchestration.
+- **Utility** : Flexibilité sur la cohésion transversale.
 
-###  Détecteur de Complexité
-Analyse la complexité du code en évaluant :
-- Le nombre de méthodes par classe
-- La fréquence des mots-clés de contrôle (if, for, while, etc.)
-- Le nombre de paramètres par fonction
+## 🔌 Extension VS Code (SOLID-Check Assistant)
 
-###  Analyseur de Cohésion (SRP)
-Détecte les violations du principe de responsabilité unique avec 4 algorithmes sophistiqués :
+L'extension **SOLID-Check Assistant** apporte toute l'intelligence de la librairie directement dans votre flux de travail quotidien. Elle transforme votre éditeur en un véritable partenaire de conception logicielle.
 
-#### 1. Ratio "ET"
-Détecte les conjonctions dans les noms de fonctions :
-- `sauvegarderEtEnvoyerEmail` Violation !
-- `creerUtilisateur` OK
+### 🧠 Feedback en Temps Réel
+- **Diagnostics Intelligents** : Les violations SOLID sont soulignées directement dans votre code.
+- **Zéro Faux Positifs** : Grâce à l'analyse de cohésion (LCOM), vos gros fichiers bien organisés ne sont plus signalés comme des erreurs.
+- **Score en Direct** : Visualisez instantanément la santé de vos composants.
 
-#### 2. Diversité des Verbes
-Analyse si le fichier mélange trop de domaines métier :
-- Calcul + Communication + Validation = Manque de cohésion
-- Uniquement Calcul = Cohésif
+### 🤖 Assistant IA & Refactorisation Automatique
+L'extension intègre un orchestrateur IA capable de transformer vos violations SOLID en code propre en un clic.
 
-#### 3. Lignes par Fonction
-Signale les fonctions dépassant **20 lignes** (trop de responsabilités).
+1. **Quick Fix (Ampoule)** : Cliquez sur une violation soulignée.
+2. **Refactoriser avec IA** : Choisissez cette option pour lancer l'orchestration.
+3. **Multi-Agent Support** : Compatible avec **GitHub Copilot**, **Cursor**, **Claude Dev**, et plus encore.
+4. **Prompting Intelligent** : L'extension génère un prompt ultra-précis incluant le contexte (Service, Repository, etc.) et les métriques de cohésion pour une refactorisation parfaite.
 
-#### 4. Dépendances Internes
-Détecte les propriétés de classe jamais utilisées ensemble (manque de cohésion).
+![SOLID-Check Extension Mockup](file:///home/n-dja-asaph/.gemini/antigravity/brain/b0248d50-b9f0-4bef-97ff-bc7f0c506c55/solid_check_extension_mockup_1770895140039.png)
 
-**Résultat** : Score de cohésion de 0 à 100, avec détail des violations.
+### 🛠️ Installation & Configuration
+Recherchez "SOLID-Check Assistant" dans le Marketplace VS Code ou installez-le via l'extension `.vsix`.
 
-###  Moteur de Validation
-Orchestrateur qui :
-- Coordonne tous les analyseurs
-- Génère un rapport détaillé
-- Retourne un code de sortie 1 en cas d'échec
+**Configuration recommandée (`settings.json`) :**
+```json
+{
+  "solidCheck.aiProvider": "vscode-lm", // Utilise Copilot/Gemini natif
+  "solidCheck.geminiApiKey": "VOTRE_CLE_ICI" // Optionnel pour accès direct
+}
+```
 
 ## 📦 Installation
 
@@ -60,190 +68,66 @@ Orchestrateur qui :
 npm install --save-dev solid-check
 ```
 
-## 🚀 Utilisation Rapide
+## 🚀 Utilisation
 
-### Méthode 1 : Avec npx (recommandé)
+### CLI (Ligne de commande)
 
 ```bash
+# Analyse simple
 npx solid-check
+
+# Avec configuration spécifique
+npx solid-check --config config/solid-config-intelligente.json
 ```
 
-### Méthode 2 : Via npm scripts
+### Configuration Intelligente
 
-Ajoutez dans votre `package.json` :
+Créez un fichier `solid-config-intelligente.json` pour ajuster les seuils :
 
 ```json
 {
-  "scripts": {
-    "lint:solid": "solid-check"
-  }
-}
-```
-
-Puis lancez :
-
-```bash
-npm run lint:solid
-```
-
-### Configuration (Optionnelle)
-
-Par défaut, SOLID-Check utilise une configuration raisonnable. Pour personnaliser, créez un fichier `config/regles.json` ou `.solid-check.json` à la racine de votre projet :
-
-```json
-{
-  "limites": {
-    "lignesParFichier": 100,
-    "methodesParClasse": 10,
-    "parametresParFonction": 5
+  "detecteurs_srp": {
+    "cohesion": {
+      "score_minimum": 60,
+      "severite": "error"
+    },
+    "categories_responsabilites": {
+      "maximum": 3
+    }
   },
-  "chemins": {
-    "aAnalyser": ["src/**/*.js"],
-    "aIgnorer": ["node_modules/**", "test/**"]
-  },
-  "regles": {
-    "verifierTailleFichiers": true,
-    "verifierComplexite": true,
-    "verifierCohesion": true,
-    "echecSurViolation": true
+  "regles_par_contexte": {
+    "patterns": {
+      "service": { "limites": { "cohesion_min": 80 } },
+      "repository": { "limites": { "cohesion_min": 70 } }
+    }
   }
 }
 ```
 
-Si aucun fichier de configuration n'est fourni, des valeurs par défaut seront utilisées.
+## 📊 Exemple de Résultat Intelligent
 
----
-
-## 🔧 Développement de SOLID-Check
-
-### Installation pour contribuer
-
-```bash
-# Cloner le projet
-git clone https://github.com/asaph65/solid-check.git
-cd solid-check
-
-# Installer les dépendances
-npm install
+✅ **Bon Code (Repository cohésif)**
+```text
+Status: ✅ SUCCESS
+📊 Métriques:
+• Cohésion: 100%
+• Lignes: 180
+• Méthodes: 25
+✅ Aucune violation - Respect des principes SOLID!
 ```
 
-### Validation du projet SOLID-Check
-
-```bash
-npm run valider
-```
-
-### Test de l'analyseur de cohésion
-
-```bash
-npm run test:cohesion
-```
-
-### Exemple d'utilisation programmatique
-
-```bash
-npm run exemple
-```
-
-## ⚙️ Configuration
-
-La configuration se trouve dans `config/regles.json` :
-
-```json
-{
-  "limites": {
-    "lignesParFichier": 100,
-    "methodesParClasse": 10,
-    "parametresParFonction": 5
-  },
-  "complexite": {
-    "motsClésMaximum": 15,
-    "niveauxImbrication": 4
-  },
-  "chemins": {
-    "aAnalyser": ["src/**/*.js"],
-    "aIgnorer": ["node_modules/**", "test/**"]
-  }
-}
-```
-
-### Injection de Dépendances
-
-Exemple du Service de Lecture de Fichiers :
-
-```javascript
-// Interface
-class ILecteurFichiers {
-  async lireFichier(cheminFichier) { ... }
-}
-
-// Implémentation concrète
-class LecteurSystemeFichiers extends ILecteurFichiers {
-  async lireFichier(cheminFichier) {
-    return await fs.readFile(cheminFichier, 'utf-8');
-  }
-}
-
-// Service avec injection de dépendances
-class ServiceLecteurFichiers {
-  constructor(adaptateur) {  // ← Injection
-    this._adaptateur = adaptateur;
-  }
-}
-
-// Utilisation
-const adaptateur = new LecteurSystemeFichiers();
-const service = new ServiceLecteurFichiers(adaptateur);
-```
-
-## Exemple de Rapport
-
-```
-================================================================================
-📊 RAPPORT DE VALIDATION SOLID-Check
-================================================================================
-
-📄 src/exemple-fichier.js (150 lignes)
---------------------------------------------------------------------------------
-❌ Le fichier 'src/exemple-fichier.js' contient 150 lignes (limite: 100)
-   Détails: { "nombreLignes": 150, "limite": 100, "depassement": 50 }
-
-⚠️  Complexité élevée détectée: 18 mots-clés de contrôle (limite: 15)
-
-================================================================================
-
-❌ Validation échouée - 2 violation(s) détectée(s)
-📈 5 fichier(s) analysé(s)
-⚠️  2 violation(s) détectée(s)
-
-================================================================================
-```
-
-## Tests
-
-Pour tester la librairie sur elle-même :
-
-```bash
-npm run valider
+❌ **Violation SRP (Service dispersé)**
+```text
+Status: ❌ ERROR
+📊 Métriques:
+• Cohésion: 45%
+• Responsabilités: 4 (CRUD, VALIDATION, NOTIFICATION, CALCUL)
+⚠️ Violation : Multiples responsabilités détectées.
+💡 Suggestion: Séparer en plusieurs classes par domaine.
 ```
 
 ## Licence
-
 MIT
 
 ## Auteur
-
 Asaph N'dja
-
-## 🤖 Ressources IA
-
-Le projet inclut des prompts optimisés pour l'assistance au refactoring :
-- [Prompt Assistant Refactoring](docs/IA_REFACTORING_PROMPT.md)
-
-## 🛡️ Intégration & Sécurité
-
-Protégez votre projet contre la dette technique :
-- **Pre-commit** : Bloquez les commits sales localement.
-- **CI/CD** : Bloquez les merges non conformes sur GitHub/GitLab.
-
-👉 [Voir le Guide d'Intégration du Gardien](docs/INTEGRATION.md)

@@ -7,4 +7,3 @@ src/test/
 server/test/
 .gitignore
 .solid-check.json
-config/

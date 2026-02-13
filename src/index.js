@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,91 +21,91 @@ import MoteurValidation from './services/validateur/index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { refactorCommand } from './cli/refactor-command.js';
+
 /**
  * Fonction principale d'exécution
  */
 async function executer() {
     try {
-        // 1. Chargement de la configuration
-        const chargeur = new ChargeurConfiguration();
+        const args = process.argv.slice(2);
 
-        // Chercher la configuration dans plusieurs emplacements (projet utilisateur d'abord)
-        const configPaths = [
-            path.join(process.cwd(), 'config/regles.json'),
+        if (args[0] === 'refactor') {
+            const filePath = args[1];
+            const options = {
+                preview: args.includes('--preview'),
+                apply: args.includes('--apply'),
+                apiKey: args.find(a => a.startsWith('--api-key='))?.split('=')[1]
+            };
+            if (!filePath) {
+                console.error('Usage: solid-check refactor <file> [--preview] [--apply] [--api-key=KEY]');
+                process.exit(1);
+            }
+            await refactorCommand(filePath, options);
+            return;
+        }
+
+        const chargeur = new ChargeurConfiguration();
+        const paths = [
+            path.join(process.cwd(), 'config/solid-config-intelligente.json'),
             path.join(process.cwd(), '.solid-check.json'),
-            path.join(__dirname, '../config/regles.json')
+            path.join(__dirname, '../config/solid-config-intelligente.json')
         ];
 
         let configuration = null;
-        for (const configPath of configPaths) {
+        for (const p of paths) {
             try {
-                configuration = await chargeur.charger(configPath);
-                console.log(`📋 Configuration chargée depuis: ${path.relative(process.cwd(), configPath) || configPath}`);
+                await fs.access(p);
+                configuration = await chargeur.charger(p);
                 break;
-            } catch (error) {
-                // Continuer vers le prochain chemin
-                continue;
-            }
+            } catch { continue; }
         }
 
-        if (!configuration) {
-            throw new Error('Aucun fichier de configuration trouvé. Veuillez créer config/regles.json ou .solid-check.json');
-        }
+        if (!configuration) configuration = chargeur.creerConfigurationParDefaut();
 
-        // 2. Injection de dépendances - Construction des services
+        console.log(`📋 Mode : Analyse Intelligente activée`);
 
-        // Service de lecture de fichiers (avec adaptateur)
         const adaptateurLecteur = new LecteurSystemeFichiers();
         const lecteurFichiers = new ServiceLecteurFichiers(adaptateurLecteur);
 
-        // Analyseurs indépendants
-        const analyseurs = [];
+        // Analyseur Unique Intelligent
+        const analyseurs = [new AnalyseurDeCohesion()];
 
-        // Toujours activer l'analyseur universel pour la démo multi-langages
-        analyseurs.push(new AnalyseurUniversel());
+        const moteurValidation = new MoteurValidation(lecteurFichiers, analyseurs, configuration);
+        const resultat = await moteurValidation.valider(process.cwd());
 
-        if (configuration.regles.verifierTailleFichiers) {
-            analyseurs.push(new AnalyseurTaille());
-        }
-
-        if (configuration.regles.verifierComplexite) {
-            analyseurs.push(new DetecteurComplexite());
-        }
-
-        if (configuration.regles.verifierCohesion) {
-            analyseurs.push(new AnalyseurDeCohesion());
-        }
-
-        // 3. Création du moteur de validation (orchestrateur)
-        const moteurValidation = new MoteurValidation(
-            lecteurFichiers,
-            analyseurs,
-            configuration
-        );
-
-        // 4. Exécution de la validation
-        const cheminRacine = process.cwd();
-        const resultat = await moteurValidation.valider(cheminRacine);
-
-        // 5. Affichage du rapport
         moteurValidation.afficherRapport(resultat);
-
-        // 6. Code de sortie selon le résultat
-        if (!resultat.succes && configuration.regles.echecSurViolation) {
-            process.exit(1);
-        }
-
+        if (!resultat.succes && configuration.regles?.echecSurViolation !== false) process.exit(1);
         process.exit(0);
-
     } catch (erreur) {
-        console.error('\n❌ Erreur fatale:', erreur.message);
-        console.error(erreur.stack);
+        console.error('\n❌ Erreur:', erreur.message);
         process.exit(1);
     }
 }
 
 // Exécution si appelé directement
-if (import.meta.url === `file://${process.argv[1]}`) {
+const estAppeleDirectement = () => {
+    const scriptPath = process.argv[1];
+    if (!scriptPath) return false;
+
+    // Normaliser les chemins pour la comparaison (important pour Windows)
+    const normalizedScriptPath = path.resolve(scriptPath);
+    const normalizedModulePath = path.resolve(__filename);
+
+    // 1. Cas standard : exécution directe (node src/index.js)
+    if (normalizedScriptPath === normalizedModulePath) return true;
+
+    // 2. Cas npm/bin : le script est appelé via un lien symbolique ou un wrapper .bin
+    // On vérifie si le chemin contient '.bin' et le nom de la commande, 
+    // ou s'il se termine par le nom du fichier.
+    const baseName = path.basename(normalizedScriptPath);
+    const isNpmBin = baseName.startsWith('solid-check') ||
+        normalizedScriptPath.includes(path.join('.bin', 'solid-check'));
+
+    return isNpmBin;
+};
+
+if (estAppeleDirectement()) {
     executer();
 }
 

@@ -1,0 +1,121 @@
+{
+    "javascript": {
+        "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx",
+            ".mjs",
+            ".cjs"
+        ],
+        "regex": {
+            "fonction": "(?:function\\s+([a-zA-Z_$][a-zA-Z0-9_$]*)|([a-zA-Z_$][a-zA-Z0-9_$]*)\\s*[:=]\\s*(?:async\\s+)?function|([a-zA-Z_$][a-zA-Z0-9_$]*)\\s*\\([^)]*\\)\\s*(?:=>|{))",
+            "classe": "class\\s+([a-zA-Z_$][a-zA-Z0-9_$]*)",
+            "bloc_debut": "{",
+            "bloc_fin": "}"
+        },
+        "mots_cles_complexite": [
+            "if",
+            "else",
+            "for",
+            "while",
+            "switch",
+            "case",
+            "&&",
+            "\\|\\|",
+            "catch",
+            "\\?",
+            "declarer"
+        ]
+    },
+    "python": {
+        "extensions": [
+            ".py"
+        ],
+        "regex": {
+            "fonction": "def\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+            "classe": "class\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+            "bloc_debut": ":",
+            "bloc_fin": "INDENTATION"
+        },
+        "mots_cles_complexite": [
+            "if",
+            "else",
+            "elif",
+            "for",
+            "while",
+            "except",
+            "and",
+            "or",
+            "with"
+        ]
+    },
+    "java": {
+        "extensions": [
+            ".java"
+        ],
+        "regex": {
+            "fonction": "(?:public|protected|private|static|\\s) +[\\w<>[\\]]+ +([a-zA-Z_][a-zA-Z0-9_]*) *\\([^)]*\\) *\\{",
+            "classe": "class\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+            "bloc_debut": "{",
+            "bloc_fin": "}"
+        },
+        "mots_cles_complexite": [
+            "if",
+            "else",
+            "for",
+            "while",
+            "switch",
+            "case",
+            "&&",
+            "\\|\\|",
+            "catch"
+        ]
+    },
+    "csharp": {
+        "extensions": [
+            ".cs"
+        ],
+        "regex": {
+            "fonction": "(?:public|protected|private|static|\\s) +[\\w<>[\\]]+ +([a-zA-Z_][a-zA-Z0-9_]*) *\\([^)]*\\) *\\{",
+            "classe": "class\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+            "bloc_debut": "{",
+            "bloc_fin": "}"
+        },
+        "mots_cles_complexite": [
+            "if",
+            "else",
+            "for",
+            "while",
+            "switch",
+            "case",
+            "&&",
+            "\\|\\|",
+            "catch"
+        ]
+    },
+    "php": {
+        "extensions": [
+            ".php"
+        ],
+        "regex": {
+            "fonction": "function\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+            "classe": "class\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+            "bloc_debut": "{",
+            "bloc_fin": "}"
+        },
+        "mots_cles_complexite": [
+            "if",
+            "else",
+            "elseif",
+            "for",
+            "foreach",
+            "while",
+            "switch",
+            "case",
+            "&&",
+            "\\|\\|",
+            "catch"
+        ]
+    }
+}

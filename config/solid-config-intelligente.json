@@ -1,0 +1,33 @@
+{
+    "detecteurs_srp": {
+        "cohesion": {
+            "score_minimum": 60,
+            "severite": "error"
+        },
+        "categories_responsabilites": {
+            "maximum": 3
+        }
+    },
+    "regles_par_contexte": {
+        "patterns": {
+            "controller": {
+                "limites": {
+                    "lignes_max": 250,
+                    "cohesion_min": 50
+                }
+            },
+            "repository": {
+                "limites": {
+                    "lignes_max": 400,
+                    "cohesion_min": 70
+                }
+            },
+            "service": {
+                "limites": {
+                    "lignes_max": 150,
+                    "cohesion_min": 80
+                }
+            }
+        }
+    }
+}

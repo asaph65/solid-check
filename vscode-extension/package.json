@@ -1,11 +1,17 @@
 {
     "name": "solid-check-assistant",
+    "type": "module",
     "displayName": "SOLID-Check Assistant",
     "description": "Assistant de qualité de code en temps réel (SOLID, Clean Code)",
-    "version": "1.1.0",
+    "version": "2.4.4",
     "publisher": "Ndjaasaph",
+    "icon": "images/icon.png",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/asaph65/solid-check"
+    },
     "engines": {
-        "vscode": "^1.75.0"
+        "vscode": "^1.90.0"
     },
     "categories": [
         "Linters",
@@ -17,7 +23,9 @@
         "onLanguage:python",
         "onLanguage:java",
         "onLanguage:csharp",
-        "onLanguage:php"
+        "onLanguage:php",
+        "onLanguage:javascriptreact",
+        "onLanguage:typescriptreact"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -25,6 +33,14 @@
             {
                 "command": "solid-check.refactoriser",
                 "title": "Refactoriser avec SOLID-Check"
+            },
+            {
+                "command": "solid-check.refactoriserIA",
+                "title": "🤖 Refactoriser avec IA (SOLID)"
+            },
+            {
+                "command": "solid-check.refactoriserAssistant",
+                "title": "🤖 Refactoriser avec Assistant (SOLID)"
             }
         ],
         "configuration": {
@@ -35,6 +51,52 @@
                     "type": "number",
                     "default": 100,
                     "description": "Nombre maximum de lignes par fichier"
+                },
+                "solidCheck.refactorModelFamily": {
+                    "type": "string",
+                    "default": "default",
+                    "description": "Famille de modèle d'IA à utiliser pour la refactorisation (ex: gpt-4, gemini-1.5-pro, claude-3-sonnet, ou 'default')"
+                },
+                "solidCheck.aiProvider": {
+                    "type": "string",
+                    "enum": [
+                        "vscode-lm",
+                        "gemini-api",
+                        "anthropic-api",
+                        "ollama"
+                    ],
+                    "default": "vscode-lm",
+                    "description": "Source pour les modèles d'IA : 'vscode-lm' (Copilot), 'gemini-api' (Direct), 'anthropic-api' (Claude), ou 'ollama' (Local)"
+                },
+                "solidCheck.geminiApiKey": {
+                    "type": "string",
+                    "default": "AIzaSyAK1mODWycY_2qXupuEZvaeo2RtzXkUlVI",
+                    "description": "Clé API Google Gemini"
+                },
+                "solidCheck.geminiModel": {
+                    "type": "string",
+                    "default": "gemini-1.5-flash",
+                    "description": "Modèle Gemini à utiliser"
+                },
+                "solidCheck.anthropicApiKey": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Clé API Anthropic (pour Claude)"
+                },
+                "solidCheck.anthropicModel": {
+                    "type": "string",
+                    "default": "claude-3-5-sonnet-20240620",
+                    "description": "Modèle Anthropic à utiliser"
+                },
+                "solidCheck.ollamaEndpoint": {
+                    "type": "string",
+                    "default": "http://localhost:11434/api/generate",
+                    "description": "Endpoint de l'API Ollama"
+                },
+                "solidCheck.ollamaModel": {
+                    "type": "string",
+                    "default": "llama3",
+                    "description": "Modèle Ollama à utiliser"
                 }
             }
         }
@@ -43,14 +105,15 @@
         "vscode:prepublish": ""
     },
     "devDependencies": {
-        "@types/vscode": "^1.75.0",
         "@types/node": "^18.0.0",
+        "@types/vscode": "^1.75.0",
+        "@vscode/vsce": "^3.7.1",
         "eslint": "^8.30.0"
     },
     "dependencies": {
         "vscode-languageclient": "^8.1.0",
         "vscode-languageserver": "^8.1.0",
-        "vscode-languageserver-textdocument": "^1.0.8",
-        "vscode-languageserver-protocol": "^3.17.3"
+        "vscode-languageserver-protocol": "^3.17.3",
+        "vscode-languageserver-textdocument": "^1.0.8"
     }
 }

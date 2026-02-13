@@ -44,7 +44,7 @@ let engineInitialized = false;
  */
 async function initializeEngine() {
     if (engineInitialized) return;
-
+    f
     try {
         // Importation dynamique des modules ESM depuis la copie locale dans l'extension
         const analyseurFichierPath = '../src-core/services/validateur/analyseur-fichier.js';
